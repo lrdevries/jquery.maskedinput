@@ -85,7 +85,8 @@ $.fn.extend({
 		settings = $.extend({
 			autoclear: $.mask.autoclear,
 			placeholder: $.mask.placeholder, // Load default placeholder
-			completed: null
+			completed: null,
+            uppercase: false
 		}, settings);
 
 
@@ -295,6 +296,9 @@ $.fn.extend({
 					p = seekNext(pos.begin - 1);
 					if (p < len) {
 						c = String.fromCharCode(k);
+                        if(settings.uppercase){
+                            c = c.toUpperCase();
+                        }
 						if (tests[p].test(c)) {
 							shiftR(p);
 
@@ -382,7 +386,9 @@ $.fn.extend({
 					}
 				} else {
 					writeBuffer();
-					input.val(input.val().substring(0, lastMatch + 1));
+					input.val(input.val().substring(0, lastMatch + 1).toUpperCase());
+                    input.trigger("change");
+
 				}
 				return (partialPosition ? i : firstNonMaskPos);
 			}

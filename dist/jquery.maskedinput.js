@@ -45,7 +45,8 @@
             return settings = $.extend({
                 autoclear: $.mask.autoclear,
                 placeholder: $.mask.placeholder,
-                completed: null
+                completed: null,
+                uppercase: !1
             }, settings), defs = $.mask.definitions, tests = [], partialPosition = len = mask.length, 
             firstNonMaskPos = null, mask = String(mask), $.each(mask.split(""), function(i, c) {
                 "?" == c ? (len--, partialPosition = i) : defs[c] ? (tests.push(new RegExp(defs[c])), 
@@ -116,7 +117,8 @@
                         var p, c, next, k = e.which || e.keyCode, pos = input.caret();
                         if (!(e.ctrlKey || e.altKey || e.metaKey || 32 > k) && k && 13 !== k) {
                             if (pos.end - pos.begin !== 0 && (clearBuffer(pos.begin, pos.end), shiftL(pos.begin, pos.end - 1)), 
-                            p = seekNext(pos.begin - 1), len > p && (c = String.fromCharCode(k), tests[p].test(c))) {
+                            p = seekNext(pos.begin - 1), len > p && (c = String.fromCharCode(k), settings.uppercase && (c = c.toUpperCase()), 
+                            tests[p].test(c))) {
                                 if (shiftR(p), buffer[p] = c, writeBuffer(), next = seekNext(p), android) {
                                     var proxy = function() {
                                         $.proxy($.fn.caret, input, next)();
@@ -151,7 +153,8 @@
                     } else buffer[i] === test.charAt(pos) && pos++, partialPosition > i && (lastMatch = i);
                     return allow ? writeBuffer() : partialPosition > lastMatch + 1 ? settings.autoclear || buffer.join("") === defaultBuffer ? (input.val() && (input.val(""), 
                     input.trigger("change")), clearBuffer(0, len)) : writeBuffer() : (writeBuffer(), 
-                    input.val(input.val().substring(0, lastMatch + 1))), partialPosition ? i : firstNonMaskPos;
+                    input.val(input.val().substring(0, lastMatch + 1).toUpperCase()), input.trigger("change")), 
+                    partialPosition ? i : firstNonMaskPos;
                 }
                 var input = $(this), buffer = $.map(mask.split(""), function(c, i) {
                     return "?" != c ? defs[c] ? getPlaceholder(i) : c : void 0;
